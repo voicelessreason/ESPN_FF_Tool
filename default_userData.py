@@ -12,3 +12,5 @@ leagueNames = ["The boiz", "Throwback", "New Gang"]
 
 # TEAM NAMES BELOW MUST MATCH YOUR TEAM NAME ON ESPN (required)
 teamNames = ["Quarter Chubb", "Hyde and Zeke", "As Far As the Eye Kelce"]
+
+# YOU MUST RENAME THIS FILE FROM 'default_userData.py' TO 'userData.py'
