@@ -4,23 +4,7 @@ from collections import Counter
 from os import system, name
 from time import sleep
 import datetime
-
-####################################################################
-## Do not edit above this line if you don't know what you're doing
-
-# this should be usable across seasons, just be sure to update year and other info below
-year = 2019
-# change this value each wweek to ensure you are comparing the right teams
-currentWeek = 4
-# input all league IDs separated by commas (required)
-leagues = [11111111, 22222222, 33333333]
-# optional
-leagueNames = ["The boiz", "Throwback", "New Gang"]
-# TEAM NAMES BELOW MUST MATCH YOUR TEAM NAME ON ESPN (required)
-teamNames = ["Quarter Chubb", "Hyde and Zeke", "As Far As the Eye Kelce"]
-
-## Do not edit below this line if you don't know what you're doing
-####################################################################
+from userData import (year, currentWeek, leagues, leagueNames, teamNames)
 
 beginTime = datetime.datetime.now()
 beginTime = beginTime.replace(microsecond = 0)
