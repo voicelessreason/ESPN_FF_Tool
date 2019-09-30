@@ -39,10 +39,7 @@ def clear():
 def getScores():
     global timesLooped
     global finishTime
-    if timesLooped == 0:
-        startTime = beginTime
-    else:
-        startTime = finishTime
+    startTime = datetime.datetime.now()
     startTime = startTime.replace(microsecond = 0)
     print("\033[0;37;40mStarted at: ", startTime)
     boxScore = PrettyTable()
@@ -94,11 +91,9 @@ def findTraitors():
     global myPlayers
     global oppPlayers
     global allPlayers
-    print("\033[0;37;40mStarted at: ", beginTime)
-    if timesLooped == 0:
-        startTime = beginTime
-    else:
-        startTime = finishTime
+    startTime = datetime.datetime.now()
+    startTime = startTime.replace(microsecond = 0)
+    print("\033[0;37;40mStarted at: ", startTime)
     traitorTable = PrettyTable()
     traitorTable.clear()
     traitorTable.field_names = [
@@ -185,7 +180,7 @@ def displayMenu():
                     getScores()
             except KeyboardInterrupt:
                 clear()
-                print("Please choose another option:")
+                print("Please choose another option:\n")
                 pass
         elif selection == '2':
             clear()
