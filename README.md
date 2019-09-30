@@ -3,6 +3,7 @@
 
 Dependencies:
   [ff-espn-api](https://github.com/cwendt94/ff-espn-api) by cwendt94
+
   [prettytable](https://github.com/jazzband/prettytable) by jazzband
 
 ```
