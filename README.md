@@ -2,9 +2,10 @@
  Small scripts to improve your QoL when using ESPN's fantasy football platform.
 
 Dependencies:
-  [ff-espn-api](https://github.com/cwendt94/ff-espn-api) by cwendt94
 
-  [prettytable](https://github.com/jazzband/prettytable) by jazzband
+[ff-espn-api](https://github.com/cwendt94/ff-espn-api) by cwendt94
+
+[prettytable](https://github.com/jazzband/prettytable) by jazzband
 
 ```
 pip install ff-espn-api
