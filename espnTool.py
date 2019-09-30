@@ -4,7 +4,6 @@ from collections import Counter
 from os import system, name
 from time import sleep
 import datetime
-import signal
 
 ####################################################################
 ## Do not edit above this line if you don't know what you're doing
@@ -31,10 +30,6 @@ oppPlayers = []
 allPlayers = []
 fullPlayers= []
 
-def keyboardInterruptHandler(signal, frame):
-    print("  KeyboardInterrupt (ID: {}) has been caught. Stopping...".format(signal))
-    exit(0)
-
 def clear():
     if name == 'nt':
         _ = system('cls')
@@ -49,7 +44,7 @@ def getScores():
     else:
         startTime = finishTime
     startTime = startTime.replace(microsecond = 0)
-    print("Started at: ", startTime)
+    print("\033[0;37;40mStarted at: ", startTime)
     boxScore = PrettyTable()
     boxScore.field_names = [
         "\033[0;30;47m League \033[0;37;40m",
@@ -72,24 +67,26 @@ def getScores():
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 home_name = "\033[1;32;40m " + home_name + " \033[0;37;40m"
-                home_score = "\033[1;32;40m " + str(home_score) + " \033[0;37;40m"
-                away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
+                if home_score > away_score:
+                    home_score = "\033[1;32;40m " + str(home_score) + " \033[0;37;40m"
+                else:
+                    home_score = "\033[1;31;40m " + str(home_score) + " \033[0;37;40m"
                 boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
             if away_name == teamNames[x]:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 away_name = "\033[1;32;40m " + away_name + " \033[0;37;40m"
-                away_score = "\033[1;32;40m " + str(away_score) + " \033[0;37;40m"
-                home_score = "\033[1;31;40m " + str(home_score) + " \033[0;37;40m"
+                if away_score > home_score:
+                    away_score = "\033[1;32;40m " + str(away_score) + " \033[0;37;40m"
+                else:
+                    away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
                 boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
     finishTime = datetime.datetime.now()
     finishTime = finishTime.replace(microsecond = 0)
     runtime = finishTime - startTime
-    #runtime = runtime.replace(microsecond = 0)
     timesLooped = timesLooped + 1
     print(boxScore)
     print("[", timesLooped, "] ", "Updated: ", finishTime, " (runtime: ", runtime, ")\n")
-    signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
 def findTraitors():
     global timesLooped
@@ -97,17 +94,18 @@ def findTraitors():
     global myPlayers
     global oppPlayers
     global allPlayers
-    print("Started at: ", beginTime)
+    print("\033[0;37;40mStarted at: ", beginTime)
     if timesLooped == 0:
         startTime = beginTime
     else:
         startTime = finishTime
-    boxScore = PrettyTable()
-    boxScore.field_names = [
-        "\033[0;30;47m Player \033[0;37;40m",
-        "\033[0;30;47m Position \033[0;37;40m",
+    traitorTable = PrettyTable()
+    traitorTable.clear()
+    traitorTable.field_names = [
+        "\033[0;30;47m WEEK " + str(currentWeek) + " \033[0;37;40m",
+        "\033[0;30;47m Pos. \033[0;37;40m",
         "\033[0;30;47m For \033[0;37;40m",
-        "\033[0;30;47m Against \033[0;37;40m"]
+        "\033[0;30;47m Opp. \033[0;37;40m"]
     for x in range(len(leagues)):
         league_id = leagues[x]
         league = League(league_id, year)
@@ -154,18 +152,19 @@ def findTraitors():
             forCount = Counter(myPlayers)[name]
             againstCount = Counter(oppPlayers)[name]
             fullPlayers.append((name, forCount, againstCount))
-    finishTime = datetime.datetime.now()
-    runtime = finishTime - startTime
     playerList = list(dict.fromkeys(fullPlayers))
     for i in range(len(playerList)):
         if (playerList[i][1] > 0) and ((playerList[i][2] > 0)):
             displayName = playerList[i][0][0]
             displayPos = playerList[i][0][1]
             plays = playerList[i][1] + playerList[i][2]
-            boxScore.add_row([displayName, displayPos, playerList[i][1], playerList[i][2]])
-    boxScore.sortby = "\033[0;30;47m Position \033[0;37;40m"
-    print(boxScore)
-    print("Processed at: ", finishTime, "\nRuntime: ", runtime, "")
+            traitorTable.add_row([displayName, displayPos, playerList[i][1], playerList[i][2]])
+    traitorTable.sortby = "\033[0;30;47m Pos. \033[0;37;40m"
+    print(traitorTable)
+    finishTime = datetime.datetime.now()
+    finishTime = finishTime.replace(microsecond = 0)
+    runtime = finishTime - startTime
+    print("Updated: ", finishTime, "\nRuntime: ", runtime, "")
 
 def displayMenu():
     menu = {}
@@ -181,16 +180,23 @@ def displayMenu():
         selection = input("Please Select: ")
         if selection =='1':
             clear()
-            while True:
-                getScores()
+            try:
+                while True:
+                    getScores()
+            except KeyboardInterrupt:
+                clear()
+                print("Please choose another option:")
+                pass
         elif selection == '2':
+            clear()
             findTraitors()
+            input("Press 'Enter' to continue...")
         elif selection == '3':
             print("Nothing here yet!")
         elif selection == '4':
             break
         else:
-            print("Unknown Option Selected!")
+            print("Unknown option selected!")
 
 clear()
 displayMenu()
