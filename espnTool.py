@@ -79,7 +79,6 @@ def findTraitors():
     startTime = startTime.replace(microsecond = 0)
     print("\033[0;37;40mStarted at: ", startTime)
     traitorTable = PrettyTable()
-    traitorTable.clear()
     traitorTable.field_names = [
         "\033[0;30;47m WEEK " + str(currentWeek) + " \033[0;37;40m",
         "\033[0;30;47m Pos. \033[0;37;40m",
