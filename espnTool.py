@@ -8,11 +8,6 @@ from userData import (year, currentWeek, leagues, leagueNames, teamNames)
 
 beginTime = datetime.datetime.now()
 beginTime = beginTime.replace(microsecond = 0)
-timesLooped = 0
-myPlayers = []
-oppPlayers = []
-allPlayers = []
-fullPlayers= []
 
 def clear():
     if name == 'nt':
@@ -21,8 +16,7 @@ def clear():
         _ = system('clear')
 
 def getScores():
-    global timesLooped
-    global finishTime
+    timesLooped = 0
     startTime = datetime.datetime.now()
     startTime = startTime.replace(microsecond = 0)
     print("\033[0;37;40mStarted at: ", startTime)
@@ -38,7 +32,6 @@ def getScores():
         league_id = leagues[x]
         league = League(league_id, year)
         box_score = league.box_scores(currentWeek)
-        i = 0
         for i in range(len(box_score)):
             home_team = box_score[i].home_team
             away_team = box_score[i].away_team
@@ -70,11 +63,10 @@ def getScores():
     print("[", timesLooped, "] ", "Updated: ", finishTime, " (runtime: ", runtime, ")\n")
 
 def findTraitors():
-    global timesLooped
-    global finishTime
-    global myPlayers
-    global oppPlayers
-    global allPlayers
+    myPlayers = []
+    oppPlayers = []
+    allPlayers = []
+    fullPlayers= []
     startTime = datetime.datetime.now()
     startTime = startTime.replace(microsecond = 0)
     print("\033[0;37;40mStarted at: ", startTime)
