@@ -9,7 +9,7 @@ The second script shows players that are starting on your team in 1+ league but 
 
 ### Dependencies
 - [ff-espn-api](https://github.com/cwendt94/ff-espn-api) from cwendt94
-- [prettyTable](https://github.com/jazzband/prettytable) - `pip install prettyTable`
+- [prettyTable](https://github.com/jazzband/prettytable)
 - [pyyaml](https://github.com/yaml/pyyaml)
 
 ### Run Instructions
