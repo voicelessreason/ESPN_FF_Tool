@@ -94,7 +94,7 @@ def findTraitors():
     global myPlayers
     global oppPlayers
     global allPlayers
-    configData = authenticate('config.yml')
+    configData = readConfig('config.yml')
     print("Started at: ", beginTime)
     if timesLooped == 0:
         startTime = beginTime
@@ -108,12 +108,13 @@ def findTraitors():
         "\033[0;30;47m Against \033[0;37;40m"]
     for name in configData['league_names']:
         year = configData['year']
+        week = configData['currentWeek']
         teamName = name
         id = configData[name]['id']
         swid = configData[name]['swid']
         espn_s2 = configData[name]['espn_s2']
         league = League(id, year, swid, espn_s2)
-        box_score = league.box_scores(currentWeek)
+        box_score = league.box_scores(week)
         i = 0
         for i in range(len(box_score)):
             home_team = box_score[i].home_team
