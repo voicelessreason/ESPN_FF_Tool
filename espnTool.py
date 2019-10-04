@@ -5,23 +5,7 @@ from os import system, name
 from time import sleep
 import datetime
 import signal
-
-####################################################################
-## Do not edit above this line if you don't know what you're doing
-
-# this should be usable across seasons, just be sure to update year and other info below
-year = 2019
-# change this value each week to ensure you are comparing the right teams
-currentWeek = 4
-# input all league IDs separated by commas (required)
-leagues = [487658, 1669270, 66999160]
-# optional
-leagueNames = ["Andrew League", "Bro League", "Work League"]
-# TEAM NAMES BELOW MUST MATCH YOUR TEAM NAME ON ESPN (required)
-teamNames = ["You're on Candid Kamara", "Hot Chubb Time Machine", "Slye Cooper"]
-
-## Do not edit below this line if you don't know what you're doing
-####################################################################
+import yaml
 
 beginTime = datetime.datetime.now()
 beginTime = beginTime.replace(microsecond = 0)
@@ -41,9 +25,16 @@ def clear():
     else:
         _ = system('clear')
 
+def readConfig(config):
+    with open(config) as f:
+        configData = yaml.load(f, Loader=yaml.FullLoader)
+        return configData
+
 def getScores():
     global timesLooped
     global finishTime
+    configData = readConfig('config.yml')
+
     if timesLooped == 0:
         startTime = beginTime
     else:
@@ -58,30 +49,36 @@ def getScores():
         "\033[0;30;47m vs \033[0;37;40m",
         "\033[0;30;47m A \033[0;37;40m",
         "\033[0;30;47m Away Team \033[0;37;40m"]
-    for x in range(len(leagues)):
-        league_id = leagues[x]
-        league = League(league_id, year)
-        box_score = league.box_scores(currentWeek)
+
+    for name in configData['league_names']:
+        year = configData['year']
+        week = configData['currentWeek']
+        teamName = name
+        id = configData[name]['id']
+        swid = configData[name]['swid']
+        espn_s2 = configData[name]['espn_s2']
+        league = League(id, year, swid, espn_s2)
+        box_score = league.box_scores(week)
         i = 0
         for i in range(len(box_score)):
             home_team = box_score[i].home_team
             away_team = box_score[i].away_team
             home_name = home_team.team_name
             away_name = away_team.team_name
-            if home_name == teamNames[x]:
+            if home_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 home_name = "\033[1;32;40m " + home_name + " \033[0;37;40m"
                 home_score = "\033[1;32;40m " + str(home_score) + " \033[0;37;40m"
                 away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
-                boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
-            if away_name == teamNames[x]:
+                boxScore.add_row([teamName, home_name, home_score , "vs", away_score, away_name])
+            if away_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 away_name = "\033[1;32;40m " + away_name + " \033[0;37;40m"
                 away_score = "\033[1;32;40m " + str(away_score) + " \033[0;37;40m"
                 home_score = "\033[1;31;40m " + str(home_score) + " \033[0;37;40m"
-                boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
+                boxScore.add_row([teamName, home_name, home_score , "vs", away_score, away_name])
     finishTime = datetime.datetime.now()
     finishTime = finishTime.replace(microsecond = 0)
     runtime = finishTime - startTime
@@ -97,6 +94,7 @@ def findTraitors():
     global myPlayers
     global oppPlayers
     global allPlayers
+    configData = authenticate('config.yml')
     print("Started at: ", beginTime)
     if timesLooped == 0:
         startTime = beginTime
@@ -108,9 +106,13 @@ def findTraitors():
         "\033[0;30;47m Position \033[0;37;40m",
         "\033[0;30;47m For \033[0;37;40m",
         "\033[0;30;47m Against \033[0;37;40m"]
-    for x in range(len(leagues)):
-        league_id = leagues[x]
-        league = League(league_id, year)
+    for name in configData['league_names']:
+        year = configData['year']
+        teamName = name
+        id = configData[name]['id']
+        swid = configData[name]['swid']
+        espn_s2 = configData[name]['espn_s2']
+        league = League(id, year, swid, espn_s2)
         box_score = league.box_scores(currentWeek)
         i = 0
         for i in range(len(box_score)):
@@ -118,7 +120,7 @@ def findTraitors():
             away_team = box_score[i].away_team
             home_name = home_team.team_name
             away_name = away_team.team_name
-            if home_name == teamNames[x]:
+            if home_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 home_lineup = box_score[i].home_lineup
@@ -133,7 +135,7 @@ def findTraitors():
                     player_pos = away_lineup[player].slot_position
                     oppPlayers.append((player_name, player_pos))
                     allPlayers.append((player_name, player_pos))
-            if away_name == teamNames[x]:
+            if away_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 home_lineup = box_score[i].home_lineup

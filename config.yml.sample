@@ -1,0 +1,7 @@
+year: 2019
+currentWeek =
+league_names: ['Sample League']
+'Sample League':
+  id: <sampleLeagueId>
+  swid: None
+  espn_s2: None
