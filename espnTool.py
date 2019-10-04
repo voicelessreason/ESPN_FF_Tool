@@ -17,6 +17,7 @@ def clear():
 
 def getScores():
     timesLooped = 0
+    print("Note: Use Ctrl-C to Stop")
     while True:
         startTime = datetime.datetime.now()
         startTime = startTime.replace(microsecond = 0)
