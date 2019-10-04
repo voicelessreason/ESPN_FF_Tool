@@ -19,7 +19,7 @@ The second script shows players that are starting on your team in 1+ league but 
 
     a. Replace the value in league_names with your league name. If you are in multiple leagues, add them all to the array. Ex: ['League One', 'League Two']
     
-    b. Replace the header 'Sample League:' with your league's name, and fill in your league ID. (repeat for multiple leagues).
+    b. Replace the header 'Sample League:' with your league's name, and fill in your league ID. Copy the entire block and repeat for multiple leagues).
     
         i. Public Leagues: Leave the final two values as None for each league
         ii. Private Leagues: Visit your league's page and copy over the necessary fields from your cookies.  
