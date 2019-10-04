@@ -17,50 +17,55 @@ def clear():
 
 def getScores():
     timesLooped = 0
-    startTime = datetime.datetime.now()
-    startTime = startTime.replace(microsecond = 0)
-    print("\033[0;37;40mStarted at: ", startTime)
-    boxScore = PrettyTable()
-    boxScore.field_names = [
-        "\033[0;30;47m League \033[0;37;40m",
-        "\033[0;30;47m Home Team \033[0;37;40m",
-        "\033[0;30;47m H \033[0;37;40m",
-        "\033[0;30;47m vs \033[0;37;40m",
-        "\033[0;30;47m A \033[0;37;40m",
-        "\033[0;30;47m Away Team \033[0;37;40m"]
-    for x in range(len(leagues)):
-        league_id = leagues[x]
-        league = League(league_id, year)
-        box_score = league.box_scores(currentWeek)
-        for i in range(len(box_score)):
-            home_team = box_score[i].home_team
-            away_team = box_score[i].away_team
-            home_name = home_team.team_name
-            away_name = away_team.team_name
-            if home_name == teamNames[x]:
-                home_score = box_score[i].home_score
-                away_score = box_score[i].away_score
-                home_name = "\033[1;32;40m " + home_name + " \033[0;37;40m"
-                if home_score > away_score:
-                    home_score = "\033[1;32;40m " + str(home_score) + " \033[0;37;40m"
-                else:
-                    home_score = "\033[1;31;40m " + str(home_score) + " \033[0;37;40m"
-                boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
-            if away_name == teamNames[x]:
-                home_score = box_score[i].home_score
-                away_score = box_score[i].away_score
-                away_name = "\033[1;32;40m " + away_name + " \033[0;37;40m"
-                if away_score > home_score:
-                    away_score = "\033[1;32;40m " + str(away_score) + " \033[0;37;40m"
-                else:
-                    away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
-                boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
-    finishTime = datetime.datetime.now()
-    finishTime = finishTime.replace(microsecond = 0)
-    runtime = finishTime - startTime
-    timesLooped = timesLooped + 1
-    print(boxScore)
-    print("[", timesLooped, "] ", "Updated: ", finishTime, " (runtime: ", runtime, ")\n")
+    while True:
+        startTime = datetime.datetime.now()
+        startTime = startTime.replace(microsecond = 0)
+        print("\033[0;37;40mStarted at:", startTime)
+        boxScore = PrettyTable()
+        boxScore.field_names = [
+            "\033[0;30;47m League \033[0;37;40m",
+            "\033[0;30;47m Home Team \033[0;37;40m",
+            "\033[0;30;47m H \033[0;37;40m",
+            "\033[0;30;47m vs \033[0;37;40m",
+            "\033[0;30;47m A \033[0;37;40m",
+            "\033[0;30;47m Away Team \033[0;37;40m"]
+        for x in range(len(leagues)):
+            league_id = leagues[x]
+            league = League(league_id, year)
+            box_score = league.box_scores(currentWeek)
+            for i in range(len(box_score)):
+                home_team = box_score[i].home_team
+                away_team = box_score[i].away_team
+                home_name = home_team.team_name
+                away_name = away_team.team_name
+                if home_name == teamNames[x]:
+                    home_score = box_score[i].home_score
+                    away_score = box_score[i].away_score
+                    home_name = "\033[1;32;40m " + home_name + " \033[0;37;40m"
+                    if home_score > away_score:
+                        home_score = "\033[1;32;40m " + str(home_score) + " \033[0;37;40m"
+                    elif home_score == away_score:
+                        home_score = "\033[1;33;40m " + str(home_score) + " \033[0;37;40m"
+                    else:
+                        home_score = "\033[1;31;40m " + str(home_score) + " \033[0;37;40m"
+                    boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
+                if away_name == teamNames[x]:
+                    home_score = box_score[i].home_score
+                    away_score = box_score[i].away_score
+                    away_name = "\033[1;32;40m " + away_name + " \033[0;37;40m"
+                    if away_score > home_score:
+                        away_score = "\033[1;32;40m " + str(away_score) + " \033[0;37;40m"
+                    elif home_score == away_score:
+                        away_score = "\033[1;33;40m " + str(away_score) + " \033[0;37;40m"
+                    else:
+                        away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
+                    boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
+        finishTime = datetime.datetime.now()
+        finishTime = finishTime.replace(microsecond = 0)
+        runtime = finishTime - startTime
+        timesLooped += 1
+        print(boxScore)
+        print("[", timesLooped, "] ", "Updated:", finishTime, "( runtime:", runtime, ")\n")
 
 def findTraitors():
     myPlayers = []
@@ -151,8 +156,7 @@ def displayMenu():
         if selection =='1':
             clear()
             try:
-                while True:
-                    getScores()
+                getScores()
             except KeyboardInterrupt:
                 clear()
                 print("Please choose another option:\n")
