@@ -170,12 +170,103 @@ def findTraitors():
     print(boxScore)
     print("Processed at: ", finishTime, "\nRuntime: ", runtime, "")
 
+def benchScore():
+    global game
+    global apiTeam
+    global teams
+    global benchPlayers
+    global benchScore
+    global benchScores
+    global lineups
+    benchScore = 0
+    benchScores = []
+    teams = []
+    lineups = []
+    benchPlayers = []
+
+    configData = readConfig('config.yml')
+    name = configData['league_names'][0]
+    year = configData['year']
+    week = configData['currentWeek']
+    teamName = name
+    id = configData[name]['id']
+    swid = configData[name]['swid']
+    espn_s2 = configData[name]['espn_s2']
+    league = League(id, year, swid, espn_s2)
+    box_score = league.box_scores(week)
+
+    i = 0
+    for i in range(len(box_score)):
+        teams.append(box_score[i].away_team.team_name)
+        teams.append(box_score[i].home_team.team_name)
+        lineups.append(box_score[i].away_lineup)
+        lineups.append(box_score[i].home_lineup)
+    for j in range(len(lineups)):
+        benchScore = 0
+        for player in lineups[j]:
+            player_pos = player.slot_position
+            benchPlayers = []
+            if player_pos == 'BE' or player_pos == "IR":
+                benchPlayers.append(player.points)
+            for benchPlayer in benchPlayers:
+                benchScore += benchPlayer
+        benchScores.append(round(benchScore))
+    benchWarmer = max(benchScores)
+    returnTeam = teams[benchScores.index(benchWarmer)]
+    print(returnTeam + ': ' + str(benchWarmer))
+
+def topScore():
+    global game
+    global apiTeam
+    global teams
+    global players
+    global score
+    global scores
+    global lineups
+    score = 0
+    scores = []
+    teams = []
+    lineups = []
+    players = []
+
+    configData = readConfig('config.yml')
+    name = configData['league_names'][0]
+    year = configData['year']
+    week = configData['currentWeek']
+    teamName = name
+    id = configData[name]['id']
+    swid = configData[name]['swid']
+    espn_s2 = configData[name]['espn_s2']
+    league = League(id, year, swid, espn_s2)
+    box_score = league.box_scores(week)
+
+    i = 0
+    for i in range(len(box_score)):
+        teams.append(box_score[i].away_team.team_name)
+        teams.append(box_score[i].home_team.team_name)
+        lineups.append(box_score[i].away_lineup)
+        lineups.append(box_score[i].home_lineup)
+    for j in range(len(lineups)):
+        score = 0
+        for player in lineups[j]:
+            player_pos = player.slot_position
+            players = []
+            if player_pos != 'BE' and player_pos != "IR":
+                players.append(player.points)
+            for p in players:
+                score += p
+        scores.append(round(score))
+    topScore = max(scores)
+    returnTeam = teams[scores.index(topScore)]
+    print(returnTeam + ': ' + str(topScore))
+
 def displayMenu():
     menu = {}
     menu['1.'] = "Start Scoreboard"
     menu['2.'] = "View Traitors"
-    menu['3.'] = "TBD"
-    menu['4.'] = "Exit"
+    menu['3.'] = "Bench Score"
+    menu['4.'] = "Top Score"
+    menu['5.'] = "Exit"
     while True:
         options = menu.keys()
         #options.sort()
@@ -189,8 +280,10 @@ def displayMenu():
         elif selection == '2':
             findTraitors()
         elif selection == '3':
-            print("Nothing here yet!")
+            benchScore()
         elif selection == '4':
+            topScore()
+        elif selection == '5':
             break
         else:
             print("Unknown Option Selected!")
