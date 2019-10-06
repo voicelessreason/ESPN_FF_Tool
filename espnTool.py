@@ -196,14 +196,7 @@ def findTraitors():
     print(boxScore)
     print("Processed at: ", finishTime, "\nRuntime: ", runtime, "")
 
-def getBenchScore():
-    global game
-    global apiTeam
-    global teams
-    global benchPlayers
-    global benchScore
-    global benchScores
-    global lineups
+def getBenchScore(league_index):
     benchScore = 0
     benchScores = []
     teams = []
@@ -211,7 +204,7 @@ def getBenchScore():
     benchPlayers = []
 
     configData = readConfig('config.yml')
-    name = configData['league_names'][0]
+    name = configData['league_names'][league_index]
     year = configData['year']
     week = configData['currentWeek']
     teamName = name
@@ -241,54 +234,38 @@ def getBenchScore():
     returnTeam = teams[benchScores.index(benchPoints)]
     return "*'Put Me In Coach' Award*: " + returnTeam + ' - ' + str(round(benchPoints, 1)) + " points left on the bench"
 
-def topScore():
-    global game
-    global apiTeam
-    global teams
-    global players
-    global score
-    global scores
-    global lineups
+def getTopScore(league_index):
     score = 0
     scores = []
-    teams = []
-    lineups = []
-    players = []
+    scorers = []
+    topScores = []
+    topScorers = []
     configData = readConfig('config.yml')
-    name = configData['league_names'][0]
+    name = configData['league_names'][league_index]
     year = configData['year']
-    week = configData['currentWeek']
-    teamName = name
+    weeks = configData['currentWeek']
     id = configData[name]['id']
     swid = configData[name]['swid']
     espn_s2 = configData[name]['espn_s2']
     league = League(id, year, swid, espn_s2)
-    box_score = league.box_scores(week)
-
     i = 0
-    for i in range(len(box_score)):
-        teams.append(box_score[i].away_team.team_name)
-        teams.append(box_score[i].home_team.team_name)
-        lineups.append(box_score[i].away_lineup)
-        lineups.append(box_score[i].home_lineup)
-    for j in range(len(lineups)):
-        score = 0
-        for player in lineups[j]:
-            player_pos = player.slot_position
-            players = []
-            if player_pos != 'BE' and player_pos != "IR":
-                players.append(player.points)
-            for p in players:
-                score += p
-        scores.append(round(score))
-    topScore = max(scores)
-    returnTeam = teams[scores.index(topScore)]
-    print(returnTeam + ': ' + str(topScore))
+    for i in range(weeks):
+        box_scores = league.box_scores(i)
+        for game in box_scores:
+            scorers.append(game.home_team.team_name)
+            scores.append(game.home_score)
+            scorers.append(game.away_team.team_name)
+            scores.append(game.away_score)
+        topScores.append(max(scores))
+        topScorers.append(scorers[scores.index(max(scores))])
+    topScore = max(topScores)
+    topScorer = topScorers[topScores.index(topScore)]
+    return "*Highest Single Week Score*: " + topScorer + " - " + str(round(topScore, 1))
 
-def getMinMaxScores():
+def getMinMaxScores(league_index):
     scores = []
     configData = readConfig('config.yml')
-    name = configData['league_names'][0]
+    name = configData['league_names'][league_index]
     year = configData['year']
     week = configData['currentWeek']
     teamName = name
@@ -305,11 +282,11 @@ def getMinMaxScores():
     burner = "*Barnburner of the Week*: " + str(barnBurner) + " points scored"
     return burner + '\n' + snooze + '\n'
 
-def getVictoryMargins():
+def getVictoryMargins(league_index):
     margins = []
     matchups = []
     configData = readConfig('config.yml')
-    name = configData['league_names'][0]
+    name = configData['league_names'][league_index]
     year = configData['year']
     week = configData['currentWeek']
     teamName = name
@@ -329,9 +306,9 @@ def getVictoryMargins():
     nailbiter = "*Nailbiter of the Week*: " + minMatchup + " - " + str(round(minMargin, 1)) + " point differential"
     return blowout + '\n' + nailbiter + '\n'
 
-def getScoreSummary():
+def getScoreSummary(league_index):
     configData = readConfig('config.yml')
-    name = configData['league_names'][0]
+    name = configData['league_names'][league_index]
     year = configData['year']
     week = configData['currentWeek']
     teamName = name
@@ -343,14 +320,39 @@ def getScoreSummary():
     returnString = ""
     for game in box_scores:
         winScore = max([game.away_score, game.home_score])
+
         if winScore == game.away_score:
-            returnString += "*" + game.away_team.team_name + "*" + " defeats " + "*" + game.home_team.team_name + "*"  + ": " + str(round(game.away_score, 1)) + " - " + str(round(game.home_score, 1)) + '\n'
+            winnerRecord = "(" + str(game.away_team.wins) + "-" + str(game.away_team.losses) + ")"
+            loserRecord = "(" + str(game.home_team.wins) + "-" + str(game.home_team.losses) + ")"
+            returnString += "*" + game.away_team.team_name + "* " + winnerRecord + " defeats " + "*" + game.home_team.team_name + "* "  + loserRecord + ": " + str(round(game.away_score, 1)) + " - " + str(round(game.home_score, 1)) + '\n'
         else:
-            returnString += "*" + game.home_team.team_name + "*" + " defeats " + "*" + game.away_team.team_name + "*"  + ": " + str(round(game.home_score, 1)) + " - " + str(round(game.away_score, 1)) + '\n'
+            winnerRecord = "(" + str(game.home_team.wins) + "-" + str(game.home_team.losses) + ")"
+            loserRecord = "(" + str(game.away_team.wins) + "-" + str(game.away_team.losses) + ")"
+            returnString += "*" + game.home_team.team_name + "* " + winnerRecord + " defeats " + "*" + game.away_team.team_name + "* "  + loserRecord + ": " + str(round(game.home_score, 1)) + " - " + str(round(game.away_score, 1)) + '\n'
     return returnString
 
-def roundUp():
-    roundUpString = getScoreSummary() + '\n' + getMinMaxScores() + getVictoryMargins() + getBenchScore() + '\n'
+def roundUpMenu():
+    configData = readConfig('config.yml')
+    week = configData['currentWeek']
+    league_names = configData['league_names']
+    i = 0
+    menu = {}
+    for i in range(len(league_names)):
+        menu[str(i+1) + '.'] = league_names[i]
+    while True:
+        options = menu.keys()
+        for entry in options:
+            print(entry, menu[entry])
+        selection = int(input("Select a league: "))
+        if selection > 0 and selection <= len(league_names):
+           roundUp((selection - 1), week)
+           break
+        else:
+            print("Invalid selection! Try again.")
+
+def roundUp(league_index, week):
+    roundUpString = "*~* *Week " + str(week) + " Round Up* *~*\n\n"
+    roundUpString += getScoreSummary(league_index) + '\n' + getMinMaxScores(league_index) + getVictoryMargins(league_index) + getBenchScore(league_index) + '\n' + getTopScore(league_index) + '\n'
     print(roundUpString)
 
 def displayMenu():
@@ -372,7 +374,7 @@ def displayMenu():
         elif selection == '2':
             findTraitors()
         elif selection == '3':
-            roundUp()
+            roundUpMenu()
         elif selection == '4':
             break
         else:
