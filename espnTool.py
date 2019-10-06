@@ -260,11 +260,31 @@ def topScore():
     returnTeam = teams[scores.index(topScore)]
     print(returnTeam + ': ' + str(topScore))
 
+def minMaxScores():
+    scores = []
+    configData = readConfig('config.yml')
+    name = configData['league_names'][0]
+    year = configData['year']
+    week = configData['currentWeek']
+    teamName = name
+    id = configData[name]['id']
+    swid = configData[name]['swid']
+    espn_s2 = configData[name]['espn_s2']
+    league = League(id, year, swid, espn_s2)
+    box_scores = league.box_scores(week)
+    for game in box_scores:
+        scores.append(game.home_score + game.away_score)
+    snoozeFest = min(scores)
+    barnBurner = max(scores)
+    print("Snoozefest of the Week: " + str(snoozeFest))
+    print("Barnburner of the Week: " + str(barnBurner))
+
+
 def displayMenu():
     menu = {}
     menu['1.'] = "Start Scoreboard"
     menu['2.'] = "View Traitors"
-    menu['3.'] = "Bench Score"
+    menu['3.'] = "MinMax"
     menu['4.'] = "Top Score"
     menu['5.'] = "Exit"
     while True:
@@ -280,7 +300,7 @@ def displayMenu():
         elif selection == '2':
             findTraitors()
         elif selection == '3':
-            benchScore()
+            minMaxScores()
         elif selection == '4':
             topScore()
         elif selection == '5':
