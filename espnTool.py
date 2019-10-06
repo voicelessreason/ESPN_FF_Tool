@@ -196,7 +196,7 @@ def findTraitors():
     print(boxScore)
     print("Processed at: ", finishTime, "\nRuntime: ", runtime, "")
 
-def benchScore():
+def getBenchScore():
     global game
     global apiTeam
     global teams
@@ -237,9 +237,9 @@ def benchScore():
             for benchPlayer in benchPlayers:
                 benchScore += benchPlayer
         benchScores.append(round(benchScore))
-    benchWarmer = max(benchScores)
-    returnTeam = teams[benchScores.index(benchWarmer)]
-    print(returnTeam + ': ' + str(benchWarmer))
+    benchPoints = max(benchScores)
+    returnTeam = teams[benchScores.index(benchPoints)]
+    return "*'Put Me In Coach' Award*: " + returnTeam + ' - ' + str(round(benchPoints, 1)) + " points left on the bench"
 
 def topScore():
     global game
@@ -254,7 +254,6 @@ def topScore():
     teams = []
     lineups = []
     players = []
-
     configData = readConfig('config.yml')
     name = configData['league_names'][0]
     year = configData['year']
@@ -286,7 +285,7 @@ def topScore():
     returnTeam = teams[scores.index(topScore)]
     print(returnTeam + ': ' + str(topScore))
 
-def minMaxScores():
+def getMinMaxScores():
     scores = []
     configData = readConfig('config.yml')
     name = configData['league_names'][0]
@@ -300,18 +299,45 @@ def minMaxScores():
     box_scores = league.box_scores(week)
     for game in box_scores:
         scores.append(game.home_score + game.away_score)
-    snoozeFest = min(scores)
-    barnBurner = max(scores)
-    print("Snoozefest of the Week: " + str(snoozeFest))
-    print("Barnburner of the Week: " + str(barnBurner))
+    snoozeFest = round(min(scores), 1)
+    barnBurner = round(max(scores), 1)
+    snooze = "*Snoozefest of the Week*: " + str(snoozeFest)
+    burner = "*Barnburner of the Week*: " + str(barnBurner)
+    return burner + '\n' + snooze + '\n'
 
+def getVictoryMargins():
+    margins = []
+    matchups = []
+    configData = readConfig('config.yml')
+    name = configData['league_names'][0]
+    year = configData['year']
+    week = configData['currentWeek']
+    teamName = name
+    id = configData[name]['id']
+    swid = configData[name]['swid']
+    espn_s2 = configData[name]['espn_s2']
+    league = League(id, year, swid, espn_s2)
+    box_scores = league.box_scores(week)
+    for game in box_scores:
+        margins.append(abs(game.home_score - game.away_score))
+        matchups.append(game.home_team.team_name + ' vs ' + game.away_team.team_name)
+    maxMargin = max(margins)
+    minMargin = min(margins)
+    maxMatchup = matchups[margins.index(maxMargin)]
+    minMatchup = matchups[margins.index(minMargin)]
+    blowout = "*Blowout of the Week*: " + maxMatchup + " - " + str(round(maxMargin, 1)) + " point differential"
+    nailbiter = "*Nailbiter of the Week*: " + minMatchup + " - " + str(round(minMargin, 1)) + " point differential"
+    return blowout + '\n' + nailbiter + '\n'
+
+def roundUp():
+    roundUpString = '\n' + getMinMaxScores() + getVictoryMargins() + getBenchScore() + '\n'
+    print(roundUpString)
 
 def displayMenu():
     menu = {}
     menu['1.'] = "Start Scoreboard"
     menu['2.'] = "View Traitors"
-    menu['3.'] = "MinMax"
-    menu['4.'] = "Top Score"
+    menu['3.'] = "Round Up Report"
     menu['5.'] = "Exit"
     while True:
         options = menu.keys()
@@ -326,10 +352,8 @@ def displayMenu():
         elif selection == '2':
             findTraitors()
         elif selection == '3':
-            minMaxScores()
+            roundUp()
         elif selection == '4':
-            topScore()
-        elif selection == '5':
             break
         else:
             print("Unknown Option Selected!")
