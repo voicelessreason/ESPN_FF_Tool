@@ -301,8 +301,8 @@ def getMinMaxScores():
         scores.append(game.home_score + game.away_score)
     snoozeFest = round(min(scores), 1)
     barnBurner = round(max(scores), 1)
-    snooze = "*Snoozefest of the Week*: " + str(snoozeFest)
-    burner = "*Barnburner of the Week*: " + str(barnBurner)
+    snooze = "*Snoozefest of the Week*: " + str(snoozeFest) + " points scored"
+    burner = "*Barnburner of the Week*: " + str(barnBurner) + " points scored"
     return burner + '\n' + snooze + '\n'
 
 def getVictoryMargins():
@@ -329,8 +329,28 @@ def getVictoryMargins():
     nailbiter = "*Nailbiter of the Week*: " + minMatchup + " - " + str(round(minMargin, 1)) + " point differential"
     return blowout + '\n' + nailbiter + '\n'
 
+def getScoreSummary():
+    configData = readConfig('config.yml')
+    name = configData['league_names'][0]
+    year = configData['year']
+    week = configData['currentWeek']
+    teamName = name
+    id = configData[name]['id']
+    swid = configData[name]['swid']
+    espn_s2 = configData[name]['espn_s2']
+    league = League(id, year, swid, espn_s2)
+    box_scores = league.box_scores(week)
+    returnString = ""
+    for game in box_scores:
+        winScore = max([game.away_score, game.home_score])
+        if winScore == game.away_score:
+            returnString += "*" + game.away_team.team_name + "*" + " defeats " + "*" + game.home_team.team_name + "*"  + ": " + str(round(game.away_score, 1)) + " - " + str(round(game.home_score, 1)) + '\n'
+        else:
+            returnString += "*" + game.home_team.team_name + "*" + " defeats " + "*" + game.away_team.team_name + "*"  + ": " + str(round(game.home_score, 1)) + " - " + str(round(game.away_score, 1)) + '\n'
+    return returnString
+
 def roundUp():
-    roundUpString = '\n' + getMinMaxScores() + getVictoryMargins() + getBenchScore() + '\n'
+    roundUpString = getScoreSummary() + '\n' + getMinMaxScores() + getVictoryMargins() + getBenchScore() + '\n'
     print(roundUpString)
 
 def displayMenu():
