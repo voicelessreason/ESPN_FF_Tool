@@ -23,9 +23,12 @@ The second script shows players that are starting on your team in 1+ league but 
     
         i. Public Leagues: Leave the final two values as None for each league
         ii. Private Leagues: Visit your league's page and copy over the necessary fields from your cookies.  
-4. Install the two necessary modules:
-
-    a. `sudo python3 -m pip install pyyaml`
+4. Install the necessary modules:
     
-    b. `pip install prettyTable`
+    a. `pip install ff_espn_api`
+    
+    b. `sudo python3 -m pip install pyyaml`
+    
+    c. `pip install prettyTable`
+    
 5. Run `python3 espnTool.py`
