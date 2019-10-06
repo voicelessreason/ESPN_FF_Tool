@@ -37,6 +37,26 @@ def getProjTeamPoints(team):
             projectedScore += player.projected_points
     return round(projectedScore, 1)
 
+def formatForHome(homeName, homeScore, homeProj, awayName, awayScore, awayProj):
+    formatted = []
+    formatted.append("\033[1;32;40m " + homeName + " \033[0;37;40m")
+    formatted.append("\033[1;32;40m " + str(homeScore) + " \033[0;37;40m")
+    formatted.append("\033[40m " + str(homeProj) + " \033[0;37;40m")
+    formatted.append("\033[40m " + str(awayProj) + " \033[0;37;40m")
+    formatted.append("\033[1;31;40m " + str(awayScore) + " \033[0;37;40m")
+    formatted.append("\033[1;31;40m " + awayName + " \033[0;37;40m")
+    return formatted
+
+def formatForAway(homeName, homeScore, homeProj, awayName, awayScore, awayProj):
+    formatted = []
+    formatted.append("\033[1;31;40m " + homeName + " \033[0;37;40m")
+    formatted.append("\033[1;31;40m " + str(homeScore) + " \033[0;37;40m")
+    formatted.append("\033[40m " + str(homeProj) + " \033[0;37;40m")
+    formatted.append("\033[40m " + str(awayProj) + " \033[0;37;40m")
+    formatted.append("\033[1;32;40m " + str(awayScore) + " \033[0;37;40m")
+    formatted.append("\033[1;32;40m " + awayName + " \033[0;37;40m")
+    return formatted
+
 def getScores():
     global timesLooped
     global finishTime
@@ -53,9 +73,9 @@ def getScores():
         "\033[0;30;47m League \033[0;37;40m",
         "\033[0;30;47m Home Team \033[0;37;40m",
         "\033[0;30;47m H \033[0;37;40m",
-        "\033[0;30;47m Proj. \033[0;37;40m",
+        "\033[0;30;47m Orig. Proj. \033[0;37;40m",
         "\033[0;30;47m vs \033[0;37;40m",
-        "\033[0;30;47m Proj \033[0;37;40m",
+        "\033[0;30;47m Orig. Proj \033[0;37;40m",
         "\033[0;30;47m A \033[0;37;40m",
         "\033[0;30;47m Away Team \033[0;37;40m"]
 
@@ -70,32 +90,21 @@ def getScores():
         box_score = league.box_scores(week)
         i = 0
         for i in range(len(box_score)):
+            scoreRow = []
             home_team = box_score[i].home_team
             away_team = box_score[i].away_team
             home_name = home_team.team_name
             away_name = away_team.team_name
-            if home_name == teamName:
-                home_score = box_score[i].home_score
-                proj_home_score = getProjTeamPoints(box_score[i].home_lineup)
-                away_score = box_score[i].away_score
-                proj_away_score = getProjTeamPoints(box_score[i].away_lineup)
-                home_name = "\033[1;32;40m " + home_name + " \033[0;37;40m"
-                home_score = "\033[1;32;40m " + str(home_score) + " \033[0;37;40m"
-                proj_home_score = "\033[40m " + str(proj_home_score) + " \033[0;37;40m"
-                away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
-                proj_away_score = "\033[40m " + str(proj_away_score) + " \033[0;37;40m"
-                boxScore.add_row([teamName, home_name, home_score, proj_home_score, "vs", proj_away_score, away_score, away_name])
-            if away_name == teamName:
-                home_score = box_score[i].home_score
-                proj_home_score = getProjTeamPoints(box_score[i].home_lineup)
-                away_score = box_score[i].away_score
-                proj_away_score = getProjTeamPoints(box_score[i].away_lineup)
-                home_name = "\033[1;32;40m " + home_name + " \033[0;37;40m"
-                home_score = "\033[1;32;40m " + str(home_score) + " \033[0;37;40m"
-                proj_home_score = "\033[40m " + str(proj_home_score) + " \033[0;37;40m"
-                away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
-                proj_away_score = "\033[40m " + str(proj_away_score) + " \033[0;37;40m"
-                boxScore.add_row([teamName, home_name, home_score, proj_home_score, "vs", proj_away_score, away_score, away_name])
+            home_score = box_score[i].home_score
+            away_score = box_score[i].away_score
+            proj_away_score = getProjTeamPoints(box_score[i].away_lineup)
+            proj_home_score = getProjTeamPoints(box_score[i].home_lineup)
+            if teamName == home_name:
+                scoreRow = formatForHome(home_name, home_score, proj_home_score, away_name, away_score, proj_away_score)
+                boxScore.add_row([teamName, scoreRow[0], scoreRow[1], scoreRow[2], "vs", scoreRow[3], scoreRow[4], scoreRow[5]])
+            elif teamName == away_name:
+                scoreRow = formatForAway(home_name, home_score, proj_home_score, away_name, away_score, proj_away_score)
+                boxScore.add_row([teamName, scoreRow[0], scoreRow[1], scoreRow[2], "vs", scoreRow[3], scoreRow[4], scoreRow[5]])
     finishTime = datetime.datetime.now()
     finishTime = finishTime.replace(microsecond = 0)
     runtime = finishTime - startTime
