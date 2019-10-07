@@ -2,11 +2,8 @@
  Small scripts to improve your QoL when using ESPN's fantasy football platform. Must be running Python 3 or higher.
 
 The first script provides a constantly updating scoreboard highlighting whether you are winning, losing, or tied.
-
 ![scoreboard image](https://i.imgur.com/1JeyGhS.png)
-
 The second script shows players that you are both starting AND playing against in at least one league.
-
 ![traitors image](https://i.imgur.com/9nKaFEh.png)
 
 ### Dependencies
@@ -21,7 +18,9 @@ The second script shows players that you are both starting AND playing against i
     a. Replace the value in "leagues" with the league variable. If you are in multiple leagues, add them all to the array. Ex: [league1, league2, league3]
 
     b. Replace the sample information with your own. Copy the entire block and repeat for multiple leagues.
+
         i. Public Leagues: Leave the final two values as None for each league
+
         ii. Private Leagues: Visit your league's page and copy over the necessary fields from your cookies
 4. Install the two necessary modules:
 
