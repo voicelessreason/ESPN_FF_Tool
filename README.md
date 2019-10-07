@@ -2,9 +2,11 @@
  Small scripts to improve your QoL when using ESPN's fantasy football platform. Must be running Python 3 or higher.
 
 The first script provides a constantly updating scoreboard highlighting whether you are winning, losing, or tied.
+
 ![image of first script](https://i.imgur.com/WBPZ9Zu.png)
 
-The second script shows players that are starting on your team in at least league but against you in at least 1 league as well.
+The second script shows players that you are both starting AND playing against in at least one league.
+
 ![image of second script](https://i.imgur.com/zV0Enpo.png)
 
 ### Dependencies
