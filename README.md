@@ -12,7 +12,7 @@ The second script shows players that you are both starting AND playing against i
 - [prettyTable](https://github.com/jazzband/prettytable) from jazzband
 
 ### Run Instructions
-1. Copy default_userData.py into userData.py
+1. Copy [default_userData.py](default_userData.py) into userData.py
 2. In userData.py, enter the current week. Update this each week to keep the tool up to date.
 3. For each league you are in:
 
