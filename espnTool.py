@@ -35,9 +35,9 @@ def getScores():
             leagueName = currentLeague[0]
             leagueID = currentLeague[1]
             teamName = currentLeague[2]
-            swid = currentLeague[3]
+            username = currentLeague[3]
             password = currentLeague[4]
-            league = League(leagueID, year, swid, password)
+            league = League(leagueID, year, username, password)
             box_score = league.box_scores(currentWeek)
             for i in range(len(box_score)):
                 home_team = box_score[i].home_team
@@ -92,9 +92,9 @@ def findTraitors():
         leagueName = currentLeague[0]
         leagueID = currentLeague[1]
         teamName = currentLeague[2]
-        swid = currentLeague[3]
+        username = currentLeague[3]
         password = currentLeague[4]
-        league = League(leagueID, year, swid, password)
+        league = League(leagueID, year, username, password)
         box_score = league.box_scores(currentWeek)
         i = 0
         for i in range(len(box_score)):
