@@ -4,7 +4,11 @@ from collections import Counter
 from os import system, name
 from time import sleep
 import datetime
+<<<<<<< HEAD
 from userData import (year, currentWeek, leagues, leagueNames, teamNames)
+=======
+from userData import (currentWeek, year, leagues)
+>>>>>>> merge1
 
 beginTime = datetime.datetime.now()
 beginTime = beginTime.replace(microsecond = 0)
@@ -31,15 +35,29 @@ def getScores():
             "\033[0;30;47m A \033[0;37;40m",
             "\033[0;30;47m Away Team \033[0;37;40m"]
         for x in range(len(leagues)):
+<<<<<<< HEAD
             league_id = leagues[x]
             league = League(league_id, year)
+=======
+            currentLeague = leagues[x]
+            leagueName = currentLeague[0]
+            leagueID = currentLeague[1]
+            teamName = currentLeague[2]
+            swid = currentLeague[3]
+            password = currentLeague[4]
+            league = League(leagueID, year, swid, password)
+>>>>>>> merge1
             box_score = league.box_scores(currentWeek)
             for i in range(len(box_score)):
                 home_team = box_score[i].home_team
                 away_team = box_score[i].away_team
                 home_name = home_team.team_name
                 away_name = away_team.team_name
+<<<<<<< HEAD
                 if home_name == teamNames[x]:
+=======
+                if home_name == teamName:
+>>>>>>> merge1
                     home_score = box_score[i].home_score
                     away_score = box_score[i].away_score
                     home_name = "\033[1;32;40m " + home_name + " \033[0;37;40m"
@@ -49,8 +67,13 @@ def getScores():
                         home_score = "\033[1;33;40m " + str(home_score) + " \033[0;37;40m"
                     else:
                         home_score = "\033[1;31;40m " + str(home_score) + " \033[0;37;40m"
+<<<<<<< HEAD
                     boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
                 if away_name == teamNames[x]:
+=======
+                    boxScore.add_row([leagueName, home_name, home_score , "vs", away_score, away_name])
+                if away_name == teamName:
+>>>>>>> merge1
                     home_score = box_score[i].home_score
                     away_score = box_score[i].away_score
                     away_name = "\033[1;32;40m " + away_name + " \033[0;37;40m"
@@ -60,7 +83,11 @@ def getScores():
                         away_score = "\033[1;33;40m " + str(away_score) + " \033[0;37;40m"
                     else:
                         away_score = "\033[1;31;40m " + str(away_score) + " \033[0;37;40m"
+<<<<<<< HEAD
                     boxScore.add_row([leagueNames[x], home_name, home_score , "vs", away_score, away_name])
+=======
+                    boxScore.add_row([leagueName, home_name, home_score , "vs", away_score, away_name])
+>>>>>>> merge1
         finishTime = datetime.datetime.now()
         finishTime = finishTime.replace(microsecond = 0)
         runtime = finishTime - startTime
@@ -83,8 +110,13 @@ def findTraitors():
         "\033[0;30;47m For \033[0;37;40m",
         "\033[0;30;47m Opp. \033[0;37;40m"]
     for x in range(len(leagues)):
-        league_id = leagues[x]
-        league = League(league_id, year)
+        currentLeague = leagues[x]
+        leagueName = currentLeague[0]
+        leagueID = currentLeague[1]
+        teamName = currentLeague[2]
+        swid = currentLeague[3]
+        password = currentLeague[4]
+        league = League(leagueID, year, swid, password)
         box_score = league.box_scores(currentWeek)
         i = 0
         for i in range(len(box_score)):
@@ -92,7 +124,7 @@ def findTraitors():
             away_team = box_score[i].away_team
             home_name = home_team.team_name
             away_name = away_team.team_name
-            if home_name == teamNames[x]:
+            if home_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 home_lineup = box_score[i].home_lineup
@@ -107,7 +139,7 @@ def findTraitors():
                     player_pos = away_lineup[player].slot_position
                     oppPlayers.append((player_name, player_pos))
                     allPlayers.append((player_name, player_pos))
-            if away_name == teamNames[x]:
+            if away_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 home_lineup = box_score[i].home_lineup
