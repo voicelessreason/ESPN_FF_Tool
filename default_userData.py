@@ -6,8 +6,8 @@ league1 = [
     "Sample League Name One", # League Name
     11111111, # League ID
     "Sample Team Name One", # Team Name (MUST BE CORRECT FOR YOUR TEAM)
-    None, # ESPN Username
-    None # ESPN Password
+    "SampleUsername", # ESPN Username
+    "SamplePassword" # ESPN Password
     ]
 
 league2 = [
