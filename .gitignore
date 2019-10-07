@@ -1,13 +1,6 @@
 .DS_Store
-<<<<<<< HEAD
 userData.py
 __pycache__/
 testRawAPI.py
 json.txt
 .idea/
-=======
-testRawAPI.py
-userData.py
-new_userData.py
-__pycache__/userData.cpython-37.pyc
->>>>>>> merge1
