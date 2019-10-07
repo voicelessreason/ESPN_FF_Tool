@@ -1,2 +1,4 @@
 config.yml
 .DS_Store
+testRawAPI.py
+userData.py
