@@ -3,6 +3,7 @@
 
 The first script provides a constantly updating scoreboard highlighting whether you are winning, losing, or tied.
 ![scoreboard image](https://i.imgur.com/1JeyGhS.png)
+
 The second script shows players that you are both starting AND playing against in at least one league.
 ![traitors image](https://i.imgur.com/9nKaFEh.png)
 
@@ -21,7 +22,7 @@ The second script shows players that you are both starting AND playing against i
 
         i. Public Leagues: Leave the final two values as None for each league
 
-        ii. Private Leagues: Use your username and password for your ESPN account (refer [here](https://github.com/cwendt94/ff-espn-api#initial-start) to use swid/espn_s2 instead of username/password)
+        ii. Private Leagues: Use username and password for your ESPN account
 4. Install the two necessary modules:
 
     a. `pip install ff_espn_api`
