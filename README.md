@@ -15,17 +15,21 @@ The second script shows players that you are both starting AND playing against i
 
 ### Run Instructions
 1. Copy default_userData.py into userData.py
-2. In userData.py, enter the current week.
+2. In userData.py, enter the current week. Update this each week to keep the tool up to date.
 3. For each league you are in:
-    a. Replace the value in league_names with your league name. If you are in multiple leagues, add them all to the array. Ex: [league1, league2, league3]
+
+    a. Replace the value in "leagues" with the league variable. If you are in multiple leagues, add them all to the array. Ex: [league1, league2, league3]
+
     b. Replace the sample information with your own. Copy the entire block and repeat for multiple leagues.
         i. Public Leagues: Leave the final two values as None for each league
-        ii. Private Leagues: Visit your league's page and copy over the necessary fields from your cookies.  
+        ii. Private Leagues: Visit your league's page and copy over the necessary fields from your cookies
 4. Install the two necessary modules:
+
     a. `pip install ff_espn_api`
+
     b. `pip install prettyTable`
 5. Run `python3 espnTool.py`
 
 ### Credits
 1. Obvious thanks to [cwendt94](https://github.com/cwendt94) and [jazzband](https://github.com/jazzband), without whom the project couldn't have gotten started
-2. Big shoutout to [VoicelessReason](https://github.com/voicelessreason) for showing interest and taking their own stab at it!
+2. Big shoutout to [VoicelessReason](https://github.com/voicelessreason) for showing interest, making their own changes, and getting those changes implemented
