@@ -3,11 +3,11 @@
 
 The first script provides a constantly updating scoreboard highlighting whether you are winning, losing, or tied.
 
-![image of first script](https://i.imgur.com/WBPZ9Zu.png)
+![scoreboard image](https://i.imgur.com/1JeyGhS.png)
 
 The second script shows players that you are both starting AND playing against in at least one league.
 
-![image of second script](https://i.imgur.com/zV0Enpo.png)
+![traitors image](https://i.imgur.com/9nKaFEh.png)
 
 ### Dependencies
 - [ff-espn-api](https://github.com/cwendt94/ff-espn-api) from cwendt94
