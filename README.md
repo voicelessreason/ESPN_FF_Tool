@@ -1,34 +1,36 @@
 # ESPN_FF_Tool
  Small scripts to improve your QoL when using ESPN's fantasy football platform. Must be running Python 3 or higher.
- 
-The first script in the tool provides a constantly updating scoreboard as seen in the image below.
-![image of first script](https://i.imgur.com/5vDJKdB.png)
 
-The second script shows players that are starting on your team in 1+ league but against you in 1+ leagues as well.
-![image of second script](https://i.imgur.com/zV0Enpo.png)
+The first script provides a constantly updating scoreboard highlighting whether you are winning, losing, or tied.
+![scoreboard image](https://i.imgur.com/1JeyGhS.png)
+
+The second script shows players that you are both starting AND playing against in at least one league.
+![traitors image](https://i.imgur.com/9nKaFEh.png)
 
 ### Dependencies
 - [ff-espn-api](https://github.com/cwendt94/ff-espn-api) from cwendt94
-- [prettyTable](https://github.com/jazzband/prettytable)
-- [pyyaml](https://github.com/yaml/pyyaml)
+- [prettyTable](https://github.com/jazzband/prettytable) from jazzband
 
 ### Run Instructions
-1. Copy config.yml.sample into config.yml 
-2. In config.yml, enter the current week.
+1. Copy [default_userData.py](default_userData.py) into userData.py
+2. In userData.py, enter the current week. Update this each week to keep the tool up to date.
 3. For each league you are in:
 
-    a. Replace the value in league_names with your league name. If you are in multiple leagues, add them all to the array. Ex: ['League One', 'League Two']
-    
-    b. Replace the header 'Sample League:' with your league's name, and fill in your league ID. Copy the entire block and repeat for multiple leagues).
-    
+    a. Replace the value in "leagues" with the league variable. If you are in multiple leagues, add them all to the array. Ex: [league1, league2, league3]
+
+    b. Replace the sample information with your own. Copy the entire block and repeat for multiple leagues.
+
         i. Public Leagues: Leave the final two values as None for each league
-        ii. Private Leagues: Visit your league's page and copy over the necessary fields from your cookies.  
-4. Install the necessary modules:
-    
+
+        ii. Private Leagues: Use username and password for your ESPN account
+4. Install the two necessary modules:
+
     a. `pip install ff_espn_api`
-    
-    b. `sudo python3 -m pip install pyyaml`
-    
-    c. `pip install prettyTable`
-    
+
+    b. `pip install prettyTable`
+
 5. Run `python3 espnTool.py`
+
+### Credits
+1. Obvious thanks to [cwendt94](https://github.com/cwendt94) and [jazzband](https://github.com/jazzband), without whom the project couldn't have gotten started
+2. Big shoutout to [VoicelessReason](https://github.com/voicelessreason) for showing interest, making their own changes, and getting those changes implemented
