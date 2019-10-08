@@ -1,2 +1,6 @@
-config.yml
 .DS_Store
+userData.py
+__pycache__/
+testRawAPI.py
+json.txt
+.idea/

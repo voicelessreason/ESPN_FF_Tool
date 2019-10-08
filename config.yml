@@ -1,0 +1,15 @@
+year: 2019
+currentWeek: 5
+league_names: ['Slye Cooper', 'Hot Chubb Time Machine', "You're on Candid Kamara"]
+'Slye Cooper':
+  id: 66999160
+  swid: None
+  espn_s2: None
+'Hot Chubb Time Machine':
+  id: 1669270
+  swid: 'AEAgEBWSpL91xenJbRl2twpd2rUaCNiFi4RDbsM3Fa%2FSlVb8Kfr8wVvy2bAgViQ5DFmzuB7zdRm%2FNPBiuXDgVgUaJ42tZlAlIOt8zsO3BpRwWNck%2B4vxMoV%2BGfXb7W8JG0fx0OFs5gnm2SUtuFgyIutW%2BQWwsfrj7lOZ5CQV2A9f0IwOBko8egz0QpFLynDRPB%2FVil0Nw9v664vBdyTlz2Kz%2BTMe8Tn9sTxB8pdHYnWYIm35wHPcBcklSuSPpzpsOMz1M%2BpK03U%2FDrqa3cCE%2B3lm'
+  espn_s2: '{908C3BEA-47E1-43B2-9D52-7D689DC5BDFF}'
+"You're on Candid Kamara":
+  id: 487658
+  swid: 'AEBediZwKgNgbdWQ1nl4Kf%2FRmsX7SwOGy9GVE%2FKKiLZXTQHhoaS2YQeEq2th6yytm%2Bz4M4tK0wnMRw2Q0IPGNfGfpNZDA5x16sv8xhRNC2bd08qAtvGzPiiXol%2FskjVIyCKX6rhrRHF%2FITjdbC71X9osn6fJScatCRs3FEMXEk8UVdHGGJdkoo21RHiHM2VFU4T7X5B3BNieqEyrZXu1oni4JQ9GlYXUO1pCFe2KijPNemOzingofDXz01DnuafhT%2Fg%3D'
+  espn_s2: '{908C3BEA-47E1-43B2-9D52-7D689DC5BDFF}'
