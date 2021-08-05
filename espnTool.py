@@ -10,84 +10,126 @@ beginTime = datetime.datetime.now()
 beginTime = beginTime.replace(microsecond = 0)
 
 def clear():
-    if name == 'nt':
-        _ = system('cls')
+    if name == "nt":
+        _ = system("cls")
     else:
-        _ = system('clear')
+        _ = system("clear")
+
+def greenText(input):
+    return "\033[1;32;40m" + str(input) + "\033[0;37;40m"
+
+def yellowText(input):
+    return "\033[1;33;40m" + str(input) + "\033[0;37;40m"
+
+def redText(input):
+    return "\033[1;31;40m" + str(input) + "\033[0;37;40m"
+
+def negText(input):
+    return "\033[0;30;47m " + str(input) + " \033[0;37;40m"
 
 def getProjTeamPoints(team):
     projectedScore = 0
+
     for player in team:
         if (player.slot_position != "BE") and (player.slot_position != "IR"):
             projectedScore += player.projected_points
-    return round(projectedScore, 1)
 
-def formatForHome(homeName, homeScore, homeProj, awayName, awayScore, awayProj):
-    formatted = []
-    formatted.append("\033[1;32;40m " + homeName + " \033[0;37;40m")
-    formatted.append("\033[1;32;40m " + str(homeScore) + " \033[0;37;40m")
-    formatted.append("\033[40m " + str(homeProj) + " \033[0;37;40m")
-    formatted.append("\033[40m " + str(awayProj) + " \033[0;37;40m")
-    formatted.append("\033[1;31;40m " + str(awayScore) + " \033[0;37;40m")
-    formatted.append("\033[1;31;40m " + awayName + " \033[0;37;40m")
-    return formatted
+    return round(projectedScore, 2)
 
-def formatForAway(homeName, homeScore, homeProj, awayName, awayScore, awayProj):
-    formatted = []
-    formatted.append("\033[1;31;40m " + homeName + " \033[0;37;40m")
-    formatted.append("\033[1;31;40m " + str(homeScore) + " \033[0;37;40m")
-    formatted.append("\033[40m " + str(homeProj) + " \033[0;37;40m")
-    formatted.append("\033[40m " + str(awayProj) + " \033[0;37;40m")
-    formatted.append("\033[1;32;40m " + str(awayScore) + " \033[0;37;40m")
-    formatted.append("\033[1;32;40m " + awayName + " \033[0;37;40m")
-    return formatted
+def getLeague(league_index):
+    global leagueName
+    global teamName
+
+    currentLeague = leagues[league_index]
+
+    leagueName = currentLeague[0]
+    leagueID = currentLeague[1]
+    teamName = currentLeague[2]
+    username = currentLeague[3]
+    password = currentLeague[4]
+
+    league = League(leagueID, year, username, password)
+    getLeague.league = league
+    # to use this just be sure to replace "league.%%"" with "getLeague.league.%%"" (typically used when getting box_score)
 
 def getScores():
     timesLooped = 0
+
     print("Note: Use Ctrl-C to Stop")
+
     while True:
         startTime = datetime.datetime.now()
         startTime = startTime.replace(microsecond = 0)
         print("\033[0;37;40mStarted at:", startTime)
+
         boxScore = PrettyTable()
         boxScore.field_names = [
-        "\033[0;30;47m League \033[0;37;40m",
-        "\033[0;30;47m Home Team \033[0;37;40m",
-        "\033[0;30;47m H \033[0;37;40m",
-        "\033[0;30;47m Orig. Proj. \033[0;37;40m",
-        "\033[0;30;47m vs \033[0;37;40m",
-        "\033[0;30;47m Orig. Proj \033[0;37;40m",
-        "\033[0;30;47m A \033[0;37;40m",
-        "\033[0;30;47m Away Team \033[0;37;40m"]
+            negText("League"),
+            negText("Home Team"),
+            negText("H (Proj)"),
+            negText("vs"),
+            negText("A (Proj)"),
+            negText("Away Team")]
+
         for x in range(len(leagues)):
-            currentLeague = leagues[x]
-            leagueName = currentLeague[0]
-            leagueID = currentLeague[1]
-            teamName = currentLeague[2]
-            username = currentLeague[3]
-            password = currentLeague[4]
-            league = League(leagueID, year, username, password)
-            box_score = league.box_scores(currentWeek)
+            getLeague(x)
+            box_score = getLeague.league.box_scores(currentWeek)
+
             for i in range(len(box_score)):
                 scoreRow = []
+
                 home_team = box_score[i].home_team
                 away_team = box_score[i].away_team
+
                 home_name = home_team.team_name
                 away_name = away_team.team_name
+
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
                 proj_away_score = getProjTeamPoints(box_score[i].away_lineup)
                 proj_home_score = getProjTeamPoints(box_score[i].home_lineup)
-                if teamName == home_name:
-                    scoreRow = formatForHome(home_name, home_score, proj_home_score, away_name, away_score, proj_away_score)
-                    boxScore.add_row([teamName, scoreRow[0], scoreRow[1], scoreRow[2], "vs", scoreRow[3], scoreRow[4], scoreRow[5]])
-                elif teamName == away_name:
-                    scoreRow = formatForAway(home_name, home_score, proj_home_score, away_name, away_score, proj_away_score)
-                    boxScore.add_row([teamName, scoreRow[0], scoreRow[1], scoreRow[2], "vs", scoreRow[3], scoreRow[4], scoreRow[5]])
+
+                if home_name == teamName:
+                    home_score = box_score[i].home_score
+                    away_score = box_score[i].away_score
+
+                    home_name = greenText(home_name)
+
+                    if home_score > away_score:
+                        home_score = greenText(home_score)
+                    elif home_score == away_score:
+                        home_score = yellowText(home_score)
+                    else:
+                        home_score = redText(home_score)
+
+                    home_score_display = str(home_score) + " (" + str(proj_home_score) + ")"
+                    away_score_display = str(away_score) + " (" + str(proj_away_score) + ")"
+
+                    boxScore.add_row([leagueName, home_name, home_score_display, "vs", away_score_display, away_name])
+
+                if away_name == teamName:
+                    home_score = box_score[i].home_score
+                    away_score = box_score[i].away_score
+
+                    away_name = greenText(away_name)
+
+                    if away_score > home_score:
+                        away_score = greenText(away_score)
+                    elif home_score == away_score:
+                        away_score = yellowText(away_score)
+                    else:
+                        away_score = redText(away_score)
+
+                    home_score_display = str(home_score) + " (" + str(proj_home_score) + ")"
+                    away_score_display = str(away_score) + " (" + str(proj_away_score) + ")"
+
+                    boxScore.add_row([leagueName, home_name, home_score_display, "vs", away_score_display, away_name])
+
         finishTime = datetime.datetime.now()
         finishTime = finishTime.replace(microsecond = 0)
         runtime = finishTime - startTime
         timesLooped += 1
+
         print(boxScore)
         print("[", timesLooped, "] ", "Updated:", finishTime, "( runtime:", runtime, ")\n")
 
@@ -96,253 +138,397 @@ def findTraitors():
     oppPlayers = []
     allPlayers = []
     fullPlayers= []
+
     startTime = datetime.datetime.now()
     startTime = startTime.replace(microsecond = 0)
     print("\033[0;37;40mStarted at: ", startTime)
+
     traitorTable = PrettyTable()
     traitorTable.field_names = [
-        "\033[0;30;47m WEEK " + str(currentWeek) + " \033[0;37;40m",
-        "\033[0;30;47m Pos. \033[0;37;40m",
-        "\033[0;30;47m For \033[0;37;40m",
-        "\033[0;30;47m Opp. \033[0;37;40m"]
+        negText("WEEK " + str(currentWeek)),
+        negText("Pos."),
+        negText("For"),
+        negText("Opp.")]
+
     for x in range(len(leagues)):
-        currentLeague = leagues[x]
-        leagueName = currentLeague[0]
-        leagueID = currentLeague[1]
-        teamName = currentLeague[2]
-        username = currentLeague[3]
-        password = currentLeague[4]
-        league = League(leagueID, year, username, password)
-        box_score = league.box_scores(currentWeek)
+        getLeague(x)
+        box_score = getLeague.league.box_scores(currentWeek)
+
         i = 0
         for i in range(len(box_score)):
             home_team = box_score[i].home_team
             away_team = box_score[i].away_team
+
             home_name = home_team.team_name
             away_name = away_team.team_name
+
             if home_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
+
                 home_lineup = box_score[i].home_lineup
                 away_lineup = box_score[i].away_lineup
+
                 for player in range(len(home_lineup)):
                     player_name = home_lineup[player].name
                     player_pos = home_lineup[player].slot_position
+
                     myPlayers.append((player_name, player_pos))
                     allPlayers.append((player_name, player_pos))
+
                 for player in range(len(away_lineup)):
                     player_name = away_lineup[player].name
                     player_pos = away_lineup[player].slot_position
+
                     oppPlayers.append((player_name, player_pos))
                     allPlayers.append((player_name, player_pos))
+
             if away_name == teamName:
                 home_score = box_score[i].home_score
                 away_score = box_score[i].away_score
+
                 home_lineup = box_score[i].home_lineup
                 away_lineup = box_score[i].away_lineup
+
                 for player in range(len(home_lineup)):
                     player_name = home_lineup[player].name
                     player_pos = home_lineup[player].slot_position
+
                     oppPlayers.append((player_name, player_pos))
                     allPlayers.append((player_name, player_pos))
+
                 for player in range(len(away_lineup)):
                     player_name = away_lineup[player].name
                     player_pos = away_lineup[player].slot_position
+
                     myPlayers.append((player_name, player_pos))
                     allPlayers.append((player_name, player_pos))
+
     for z in range(len(allPlayers)):
         name = allPlayers[z]
-        if (name[1] != "BE") and (name[1] != "IR"):
+        position = name[1]
+
+        if (position != "BE") and (position != "IR"):
             forCount = Counter(myPlayers)[name]
             againstCount = Counter(oppPlayers)[name]
+
             fullPlayers.append((name, forCount, againstCount))
+
     playerList = list(dict.fromkeys(fullPlayers))
+
     for i in range(len(playerList)):
         if (playerList[i][1] > 0) and ((playerList[i][2] > 0)):
             displayName = playerList[i][0][0]
             displayPos = playerList[i][0][1]
             plays = playerList[i][1] + playerList[i][2]
+
             traitorTable.add_row([displayName, displayPos, playerList[i][1], playerList[i][2]])
-    traitorTable.sortby = "\033[0;30;47m Pos. \033[0;37;40m"
+
+    traitorTable.sortby = negText("Pos.")
     print(traitorTable)
+
     finishTime = datetime.datetime.now()
     finishTime = finishTime.replace(microsecond = 0)
     runtime = finishTime - startTime
     print("Updated: ", finishTime, "\nRuntime: ", runtime, "")
 
 def getBenchScore(league_index):
+    roundUpAwards = roundUp.roundUpAwards
     benchScore = 0
     benchScores = []
-    teams = []
+    matchups = []
     lineups = []
     benchPlayers = []
 
-    currentLeague = leagues[league_index]
-    leagueName = currentLeague[0]
-    leagueID = currentLeague[1]
-    teamName = currentLeague[2]
-    username = currentLeague[3]
-    password = currentLeague[4]
-    league = League(leagueID, year, username, password)
-    box_score = league.box_scores(currentWeek)
+    getLeague(league_index)
+    box_score = getLeague.league.box_scores(currentWeek)
+
     i = 0
     for i in range(len(box_score)):
-        teams.append(box_score[i].away_team.team_name)
-        teams.append(box_score[i].home_team.team_name)
+        matchups.append(box_score[i].away_team.team_name)
+        matchups.append(box_score[i].home_team.team_name)
+
         lineups.append(box_score[i].away_lineup)
         lineups.append(box_score[i].home_lineup)
+
     for j in range(len(lineups)):
         benchScore = 0
+
         for player in lineups[j]:
             player_pos = player.slot_position
             benchPlayers = []
-            if player_pos == 'BE' or player_pos == "IR":
+
+            if (player_pos == "BE") or (player_pos == "IR"):
                 benchPlayers.append(player.points)
+
             for benchPlayer in benchPlayers:
                 benchScore += benchPlayer
         benchScores.append(round(benchScore))
+
     benchPoints = max(benchScores)
-    returnTeam = teams[benchScores.index(benchPoints)]
-    return "*'Put Me In Coach' Award*: " + returnTeam + ' - ' + str(round(benchPoints, 1)) + " points left on the bench"
+    returnTeam = matchups[benchScores.index(benchPoints)]
+
+    if returnTeam == teamName:
+        returnTeam = greenText(returnTeam)
+
+    roundUpAwards.add_row(["'Put Me In Coach!' Award", returnTeam, str(round(benchPoints, 2)) + " bench points"])
 
 def getTopScore(league_index):
+    roundUpAwards = roundUp.roundUpAwards
     score = 0
     scores = []
     scorers = []
     topScores = []
     topScorers = []
-    currentLeague = leagues[league_index]
-    leagueName = currentLeague[0]
-    leagueID = currentLeague[1]
-    teamName = currentLeague[2]
-    username = currentLeague[3]
-    password = currentLeague[4]
-    league = League(leagueID, year, username, password)
-    i = 0
+    week = []
+    weeks = []
+    topWeek = []
+    topWeeks = []
+
+    getLeague(league_index)
+
     for i in range(currentWeek):
-        box_scores = league.box_scores(i)
+        box_scores = getLeague.league.box_scores(i + 1)
+
         for game in box_scores:
             scorers.append(game.home_team.team_name)
             scores.append(game.home_score)
+            weeks.append(i + 1)
+
             scorers.append(game.away_team.team_name)
             scores.append(game.away_score)
+            weeks.append(i + 1)
+
         topScores.append(max(scores))
         topScorers.append(scorers[scores.index(max(scores))])
+        topWeeks.append(weeks[scores.index(max(scores))])
+
     topScore = max(topScores)
     topScorer = topScorers[topScores.index(topScore)]
-    return "*Highest Single Week Score*: " + topScorer + " - " + str(round(topScore, 1))
+    topWeek = topWeeks[topScores.index(topScore)]
+
+    if topScorer == teamName:
+        topScorer = greenText(topScorer)
+
+    roundUpAwards.add_row(["Highest Score This Season", topScorer, str(round(topScore, 2)) + " points in week " + str(topWeek)])
 
 def getMinMaxScores(league_index):
+    roundUpAwards = roundUp.roundUpAwards
     scores = []
-    currentLeague = leagues[league_index]
-    leagueName = currentLeague[0]
-    leagueID = currentLeague[1]
-    teamName = currentLeague[2]
-    username = currentLeague[3]
-    password = currentLeague[4]
-    league = League(leagueID, year, username, password)
-    box_scores = league.box_scores(currentWeek)
+    matchups = []
+
+    getLeague(league_index)
+    box_scores = getLeague.league.box_scores(currentWeek)
+
     for game in box_scores:
         scores.append(game.home_score + game.away_score)
-    snoozeFest = round(min(scores), 1)
-    barnBurner = round(max(scores), 1)
-    snooze = "*Snoozefest of the Week*: " + str(snoozeFest) + " points scored"
-    burner = "*Barnburner of the Week*: " + str(barnBurner) + " points scored"
-    return burner + '\n' + snooze + '\n'
+
+        homeTeamName = game.home_team.team_name
+        awayTeamName = game.away_team.team_name
+
+        if homeTeamName == teamName:
+            homeTeamName = greenText(homeTeamName)
+
+        if awayTeamName == teamName:
+            awayTeamName = greenText(awayTeamName)
+
+        matchups.append(homeTeamName + " | " + awayTeamName)
+
+    snoozeFest = round(min(scores), 2)
+    barnBurner = round(max(scores), 2)
+
+    snoozeTeams = matchups[scores.index(min(scores))]
+    burnerTeams = matchups[scores.index(max(scores))]
+
+    roundUpAwards.add_row(["Barnburner Matchup", burnerTeams, str(barnBurner) + " combined points"])
+    roundUpAwards.add_row(["Total Snoozefest", snoozeTeams, str(snoozeFest) + " combined points"])
 
 def getVictoryMargins(league_index):
+    roundUpAwards = roundUp.roundUpAwards
     margins = []
     matchups = []
-    currentLeague = leagues[league_index]
-    leagueName = currentLeague[0]
-    leagueID = currentLeague[1]
-    teamName = currentLeague[2]
-    username = currentLeague[3]
-    password = currentLeague[4]
-    league = League(leagueID, year, username, password)
-    box_scores = league.box_scores(currentWeek)
+
+    getLeague(league_index)
+    box_scores = getLeague.league.box_scores(currentWeek)
+
     for game in box_scores:
         margins.append(abs(game.home_score - game.away_score))
-        matchups.append(game.home_team.team_name + ' vs ' + game.away_team.team_name)
+
+        homeTeamName = game.home_team.team_name
+        awayTeamName = game.away_team.team_name
+
+        if homeTeamName == teamName:
+            homeTeamName = greenText(homeTeamName)
+
+        if awayTeamName == teamName:
+            awayTeamName = greenText(awayTeamName)
+
+        matchups.append(homeTeamName + " | " + awayTeamName)
+
     maxMargin = max(margins)
     minMargin = min(margins)
+
     maxMatchup = matchups[margins.index(maxMargin)]
     minMatchup = matchups[margins.index(minMargin)]
-    blowout = "*Blowout of the Week*: " + maxMatchup + " - " + str(round(maxMargin, 1)) + " point differential"
-    nailbiter = "*Nailbiter of the Week*: " + minMatchup + " - " + str(round(minMargin, 1)) + " point differential"
-    return blowout + '\n' + nailbiter + '\n'
+
+    maxMargin = round(maxMargin, 2)
+    minMargin = round(minMargin, 2)
+
+    if minMargin <= 10:
+        minMargin = yellowText(minMargin)
+
+    roundUpAwards.add_row(["Blowout of the Week", maxMatchup, str(maxMargin) + " point differential"])
+    roundUpAwards.add_row(["Nailbiter of the Week", minMatchup, str(minMargin) + " point differential"])
 
 def getScoreSummary(league_index):
-    currentLeague = leagues[league_index]
-    leagueName = currentLeague[0]
-    leagueID = currentLeague[1]
-    teamName = currentLeague[2]
-    username = currentLeague[3]
-    password = currentLeague[4]
-    league = League(leagueID, year, username, password)
-    box_scores = league.box_scores(currentWeek)
-    returnString = ""
+    roundUpScoreboard = roundUp.roundUpScoreboard
+
+    getLeague(league_index)
+    box_scores = getLeague.league.box_scores(currentWeek)
+
     for game in box_scores:
         winScore = max([game.away_score, game.home_score])
 
         if winScore == game.away_score:
+            winnerTeam = game.away_team.team_name
+            loserTeam = game.home_team.team_name
+
+            if winnerTeam == teamName:
+                winnerTeam = greenText(winnerTeam)
+
+            if loserTeam == teamName:
+                loserTeam = greenText(loserTeam)
+
             winnerRecord = "(" + str(game.away_team.wins) + "-" + str(game.away_team.losses) + ")"
             loserRecord = "(" + str(game.home_team.wins) + "-" + str(game.home_team.losses) + ")"
-            returnString += "*" + game.away_team.team_name + "* " + winnerRecord + " defeats " + "*" + game.home_team.team_name + "* "  + loserRecord + ": " + str(round(game.away_score, 1)) + " - " + str(round(game.home_score, 1)) + '\n'
+
+            winnerScore = str(round(game.away_score, 2))
+            loserScore = str(round(game.home_score, 2))
         else:
+            winnerTeam = game.home_team.team_name
+            loserTeam = game.away_team.team_name
+
+            if winnerTeam == teamName:
+                winnerTeam = greenText(winnerTeam)
+
+            if loserTeam == teamName:
+                loserTeam = greenText(loserTeam)
+
             winnerRecord = "(" + str(game.home_team.wins) + "-" + str(game.home_team.losses) + ")"
             loserRecord = "(" + str(game.away_team.wins) + "-" + str(game.away_team.losses) + ")"
-            returnString += "*" + game.home_team.team_name + "* " + winnerRecord + " defeats " + "*" + game.away_team.team_name + "* "  + loserRecord + ": " + str(round(game.home_score, 1)) + " - " + str(round(game.away_score, 1)) + '\n'
-    return returnString
+
+            winnerScore = str(round(game.home_score, 2))
+            loserScore = str(round(game.away_score, 2))
+
+        roundUpScoreboard.add_row([winnerTeam + " " + winnerRecord, winnerScore, loserScore, loserTeam + " " + loserRecord])
 
 def roundUpMenu():
     i = 0
     menu = {}
-    for i in range(len(leagues)):
-        menu[str(i+1) + '.'] = leagues[i][0]
+
+    for i in range(len(leagues) + 1):
+        try:
+            menu[str(i+1) + "."] = leagues[i][0]
+        except:
+            menu[str(i+1) + "."] = "All"
+            menu[str(i+2) + "."] = "Go Back"
+
     while True:
         options = menu.keys()
+
         for entry in options:
             print(entry, menu[entry])
-        selection = int(input("Select a league: "))
-        if selection > 0 and selection <= len(leagues):
-           roundUp((selection - 1), currentWeek)
-           break
+
+        roundUpSelection = int(input("Select a league: "))
+        roundUpMenu.roundUpSelection = roundUpSelection
+
+        if (roundUpSelection > 0) and (roundUpSelection <= len(leagues)):
+            clear()
+            roundUp((roundUpSelection - 1), currentWeek)
+            break
+        elif (roundUpSelection == (len(leagues) + 1)):
+            clear()
+            for i in range(roundUpSelection - 1):
+                roundUp(i, currentWeek)
+            break
+        elif (roundUpSelection == (len(leagues) + 2)):
+            clear()
+            break
         else:
             print("Invalid selection! Try again.")
 
 def roundUp(league_index, week):
-    roundUpString = "*~* *Week " + str(week) + " Round Up* *~*\n\n"
-    roundUpString += getScoreSummary(league_index) + '\n' + getMinMaxScores(league_index) + getVictoryMargins(league_index) + getBenchScore(league_index) + '\n' + getTopScore(league_index) + '\n'
-    print(roundUpString)
+    startTime = datetime.datetime.now()
+    startTime = startTime.replace(microsecond = 0)
+    print("\033[0;37;40mStarted at:", startTime)
+
+    roundUpSelection = roundUpMenu.roundUpSelection
+
+    roundUpScoreboard = PrettyTable()
+    roundUpScoreboard.field_names = [
+    negText("Winner"),
+    negText("W"),
+    negText("L"),
+    negText("Loser")]
+
+    roundUpAwards = PrettyTable()
+    roundUpAwards.field_names = [
+    negText("Award"),
+    negText("Team(s)"),
+    negText("Values")]
+
+    roundUp.roundUpScoreboard = roundUpScoreboard
+    roundUp.roundUpAwards = roundUpAwards
+
+    getScoreSummary(league_index)
+    getMinMaxScores(league_index)
+    getVictoryMargins(league_index)
+    getBenchScore(league_index)
+    getTopScore(league_index)
+
+    print("    " + negText("*~* " + leagueName + ": Week " + str(week) + " Round Up *~*"))
+    print(roundUpScoreboard)
+    print(roundUpAwards)
+
+    finishTime = datetime.datetime.now()
+    finishTime = finishTime.replace(microsecond = 0)
+    runtime = finishTime - startTime
+    print("Completed at:", finishTime, " (runtime:", runtime, ")")
 
 def displayMenu():
     menu = {}
-    menu['1.'] = "Start Scoreboard"
-    menu['2.'] = "View Traitors"
-    menu['3.'] = "Round Up Report"
-    menu['4.'] = "Exit"
+    menu["1."] = "Start Scoreboard"
+    menu["2."] = "View Traitors"
+    menu["3."] = "Round Up Report"
+    menu["4."] = "Exit"
+
     while True:
         options = menu.keys()
-        #options.sort()
         for entry in options:
             print(entry, menu[entry])
-        selection = input("Please Select: ")
-        if selection =='1':
+
+        mainSelection = input("Please Select: ")
+
+        if mainSelection == "1":
             clear()
             try:
                 getScores()
+
             except KeyboardInterrupt:
                 clear()
                 print("Please choose another option:\n")
                 pass
-        elif selection == '2':
+        elif mainSelection == "2":
             clear()
             findTraitors()
-            input("Press 'Enter' to continue...")
-        elif selection == '3':
+            input("Press 'Enter' to return to menu...")
+            clear()
+        elif mainSelection == "3":
+            clear()
             roundUpMenu()
-        elif selection == '4':
+            input("Press 'Enter' to return to main menu...")
+            clear()
+        elif mainSelection == "4":
             break
         else:
             print("Unknown option selected!")
