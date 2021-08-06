@@ -1,29 +1,27 @@
 # ESPN_FF_Tool
- Small scripts to improve your QoL when using ESPN's fantasy football platform. Must be running Python 3 or higher.
+This is a tool for accessing the ESPN Fantasy Football API which provides two main functions:
 
-The first script provides a constantly updating scoreboard highlighting whether you are winning, losing, or tied.
+A real-time display of all your matchups across all your leagues.
 ![scoreboard image](https://i.imgur.com/1JeyGhS.png)
 
-The second script shows players that you are both starting AND playing against in at least one league.
-![traitors image](https://i.imgur.com/9nKaFEh.png)
+A report on the results of a given week's matchups in the league of your choice. This is primarily for commissioners who would like to add something to their league experience.
 
 ### Dependencies
 - [ff-espn-api](https://github.com/cwendt94/ff-espn-api) from cwendt94
 - [prettyTable](https://github.com/jazzband/prettytable) from jazzband
 
 ### Run Instructions
-1. Copy [default_userData.py](default_userData.py) into userData.py
-2. In userData.py, enter the current week. Update this each week to keep the tool up to date.
-3. For each league you are in:
 
-    a. Replace the value in "leagues" with the league variable. If you are in multiple leagues, add them all to the array. Ex: [league1, league2, league3]
+1. Retrieve three pieces of information, your `leagueId` (for each league), your `espn_s2` and your `swid`. The final two can be found in the cookies for espn.com when logged in. The ID will be visible in the URL as a query param.
+2. Copy [default_userData.py](default_userData.py) into userData.py
+3. In userData.py, enter the current week and year. Update this each week to keep the tool up to date.
+4. For each league:
+
+    a. Replace the value in "leagues" with the league variable. If in multiple leagues, add them all to the array. Ex: [league1, league2, league3]
 
     b. Replace the sample information with your own. Copy the entire block and repeat for multiple leagues.
 
-        i. Public Leagues: Leave the final two values as None for each league
-
-        ii. Private Leagues: Use username and password for your ESPN account
-4. Install the two necessary modules:
+5. Install the two necessary modules:
 
     a. `pip install ff_espn_api`
 
@@ -33,4 +31,4 @@ The second script shows players that you are both starting AND playing against i
 
 ### Credits
 1. Obvious thanks to [cwendt94](https://github.com/cwendt94) and [jazzband](https://github.com/jazzband), without whom the project couldn't have gotten started
-2. Big shoutout to [VoicelessReason](https://github.com/voicelessreason) for showing interest, making their own changes, and getting those changes implemented
+2. Big thanks to [Drippyer](https://github.com/drippyer/) for starting the project and writing the score display functionality

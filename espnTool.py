@@ -88,79 +88,6 @@ def getScores():
         print(boxScore)
         print("[", timesLooped, "] ", "Updated:", finishTime, "( runtime:", runtime, ")\n")
 
-def findTraitors():
-    myPlayers = []
-    oppPlayers = []
-    allPlayers = []
-    fullPlayers= []
-    startTime = datetime.datetime.now()
-    startTime = startTime.replace(microsecond = 0)
-    print("\033[0;37;40mStarted at: ", startTime)
-    traitorTable = PrettyTable()
-    traitorTable.field_names = [
-        "\033[0;30;47m WEEK " + str(currentWeek) + " \033[0;37;40m",
-        "\033[0;30;47m Pos. \033[0;37;40m",
-        "\033[0;30;47m For \033[0;37;40m",
-        "\033[0;30;47m Opp. \033[0;37;40m"]
-    for x in range(len(leagues)):
-        teamName = leagues[x]["teamName"]
-        box_score = authed_leagues[x].box_scores(currentWeek)
-        i = 0
-        for i in range(len(box_score)):
-            home_team = box_score[i].home_team
-            away_team = box_score[i].away_team
-            home_name = home_team.team_name
-            away_name = away_team.team_name
-            if home_name == teamName:
-                home_score = box_score[i].home_score
-                away_score = box_score[i].away_score
-                home_lineup = box_score[i].home_lineup
-                away_lineup = box_score[i].away_lineup
-                for player in range(len(home_lineup)):
-                    player_name = home_lineup[player].name
-                    player_pos = home_lineup[player].slot_position
-                    myPlayers.append((player_name, player_pos))
-                    allPlayers.append((player_name, player_pos))
-                for player in range(len(away_lineup)):
-                    player_name = away_lineup[player].name
-                    player_pos = away_lineup[player].slot_position
-                    oppPlayers.append((player_name, player_pos))
-                    allPlayers.append((player_name, player_pos))
-            if away_name == teamName:
-                home_score = box_score[i].home_score
-                away_score = box_score[i].away_score
-                home_lineup = box_score[i].home_lineup
-                away_lineup = box_score[i].away_lineup
-                for player in range(len(home_lineup)):
-                    player_name = home_lineup[player].name
-                    player_pos = home_lineup[player].slot_position
-                    oppPlayers.append((player_name, player_pos))
-                    allPlayers.append((player_name, player_pos))
-                for player in range(len(away_lineup)):
-                    player_name = away_lineup[player].name
-                    player_pos = away_lineup[player].slot_position
-                    myPlayers.append((player_name, player_pos))
-                    allPlayers.append((player_name, player_pos))
-    for z in range(len(allPlayers)):
-        name = allPlayers[z]
-        if (name[1] != "BE") and (name[1] != "IR"):
-            forCount = Counter(myPlayers)[name]
-            againstCount = Counter(oppPlayers)[name]
-            fullPlayers.append((name, forCount, againstCount))
-    playerList = list(dict.fromkeys(fullPlayers))
-    for i in range(len(playerList)):
-        if (playerList[i][1] > 0) and ((playerList[i][2] > 0)):
-            displayName = playerList[i][0][0]
-            displayPos = playerList[i][0][1]
-            plays = playerList[i][1] + playerList[i][2]
-            traitorTable.add_row([displayName, displayPos, playerList[i][1], playerList[i][2]])
-    traitorTable.sortby = "\033[0;30;47m Pos. \033[0;37;40m"
-    print(traitorTable)
-    finishTime = datetime.datetime.now()
-    finishTime = finishTime.replace(microsecond = 0)
-    runtime = finishTime - startTime
-    print("Updated: ", finishTime, "\nRuntime: ", runtime, "")
-
 def getBenchScore(league_index):
     benchScore = 0
     benchScores = []
@@ -281,9 +208,8 @@ def initializeLeagues():
 def displayMenu():
     menu = {}
     menu['1.'] = "Start Scoreboard"
-    menu['2.'] = "View Traitors"
-    menu['3.'] = "Round Up Report"
-    menu['4.'] = "Exit"
+    menu['2.'] = "Round Up Report"
+    menu['3.'] = "Exit"
     while True:
         options = menu.keys()
         #options.sort()
@@ -300,11 +226,9 @@ def displayMenu():
                 pass
         elif selection == '2':
             clear()
-            findTraitors()
+            roundUpMenu()
             input("Press 'Enter' to continue...")
         elif selection == '3':
-            roundUpMenu()
-        elif selection == '4':
             break
         else:
             print("Unknown option selected!")
