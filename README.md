@@ -12,7 +12,7 @@ A report on the results of a given week's matchups in the league of your choice.
 
 ### Run Instructions
 
-1. Retrieve three pieces of information, your `leagueId` (for each league), your `espn_s2` and your `swid`. The final two can be found in the cookies for espn.com when logged in. The ID will be visible in the URL as a query param.
+1. Retrieve three pieces of information, your `leagueId` (for each league), your `espn_s2` and your `swid`. After logging into the espn desktop website, you can find the `espn_s2` and  `swid` in the cookies. For each league, your `leagueId` will be visibile in the URL as a query param. 
 2. Copy [default_userData.py](default_userData.py) into userData.py
 3. In userData.py, enter the current week and year. Update this each week to keep the tool up to date.
 4. For each league:
