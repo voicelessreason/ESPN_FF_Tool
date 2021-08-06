@@ -1,34 +1,29 @@
-currentWeek = 5                         # Change this each week
+currentWeek = 1                         # Change this each week
 
-year = 2019                             # Change this to reflect each season
+year = 2021                             # Change this to reflect each season
 
-                                        # If any leagues are private
-espnUsername = "SampleUsername"         # input username here and
-espnPassword = "SamplePassword"         # input password here then
-                                        # modify variable names below
+league1 = {
+    "leagueName": "Sample League Name One",
+    "leagueID": 11111111,
+    "teamName":  "Sample Team Name One",
+    "espn_s2": '<ESPN_S2>',
+    "swid": '<SWID>'
+}
 
-league1 = [
-    "Sample League Name One",           # League Name
-    11111111,                           # League ID
-    "Sample Team Name One",             # Team Name (MUST BE CORRECT FOR YOUR TEAM)
-    espnUsername,                       # either (espnUsername) or (None)
-    espnPassword                        # either (espnPassword) or (None)
-    ]
+league2 = {
+    "leagueName": "Sample League Name Two",
+    "leagueID": 22222222,
+    "teamName":  "Sample Team Name Two",
+    "espn_s2": '<ESPN_S2>',
+    "swid": '<SWID>'
+}
 
-league2 = [
-    "Sample League Name Two",           # League Name
-    22222222,                           # League ID
-    "Sample Team Name Two",             # Team Name (MUST BE CORRECT FOR YOUR TEAM)
-    None,                               # either (espnUsername) or (None)
-    None                                # either (espnPassword) or (None)
-    ]
-
-league3 = [
-    "Sample League Name Three",         # League Name
-    33333333,                           # League ID
-    "Sample Team Name Three",           # Team Name (MUST BE CORRECT FOR YOUR TEAM)
-    None,                               # either (espnUsername) or (None)
-    None                                # either (espnPassword) or (None)
-    ]
+league3 = {
+    "leagueName": "Sample League Name Three",
+    "leagueID": 33333333,
+    "teamName":  "Sample Team Name Three",
+    "espn_s2": '<ESPN_S2>',
+    "swid": '<SWID>'
+}
 
 leagues = [league1, league2, league3]
