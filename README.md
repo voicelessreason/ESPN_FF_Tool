@@ -30,5 +30,5 @@ A report on the results of a given week's matchups in the league of your choice.
 5. Run `python3 espnTool.py`
 
 ### Credits
-1. Obvious thanks to [cwendt94](https://github.com/cwendt94) and [jazzband](https://github.com/jazzband), without whom the project couldn't have gotten started
+1. Huge credit is owed to [cwendt94](https://github.com/cwendt94) and [jazzband](https://github.com/jazzband)
 2. Big thanks to [Drippyer](https://github.com/drippyer/) for starting the project and writing the score display functionality
