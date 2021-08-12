@@ -1,7 +1,5 @@
-from ff_espn_api import League
 from userData import (currentWeek, leagues)
 authed_leagues = []
-
 
 def getBenchScore(league_index):
     benchScore = 0
@@ -94,11 +92,10 @@ def getScoreSummary(league_index):
 
 
 
-def roundUp(league_index, week, authed, normal):
+def roundUp(league_index, week, authed):
     global authed_leagues
     global leagues
     authed_leagues = authed
-    leagues = normal
 
     roundUpString = "*~* *Week " + str(week) + " Round Up* *~*\n\n"
     roundUpString += getScoreSummary(league_index) + '\n' + getMinMaxScores(league_index) + getVictoryMargins(league_index) + getBenchScore(league_index) + '\n' + getTopScore(league_index) + '\n'

@@ -108,7 +108,7 @@ def roundUpMenu():
             print(entry, menu[entry])
         selection = int(input("Select a league: "))
         if selection > 0 and selection <= len(leagues):
-           roundUp((selection - 1), currentWeek, authed_leagues, leagues)
+           roundUp((selection - 1), currentWeek, authed_leagues)
            break
         else:
             print("Invalid selection! Try again.")
@@ -139,8 +139,6 @@ def displayMenu():
             break
         else:
             print("Unknown option selected!")
-
-
 
 clear()
 initializeLeagues()
