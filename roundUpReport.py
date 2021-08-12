@@ -1,4 +1,4 @@
-from userData import (currentWeek, leagues)
+from userData import (currentWeek)
 authed_leagues = []
 
 def getBenchScore(league_index):

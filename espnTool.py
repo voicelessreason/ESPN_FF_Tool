@@ -1,8 +1,6 @@
 from ff_espn_api import League
 from prettytable import PrettyTable
-from collections import Counter
 from os import system, name
-from time import sleep
 import datetime
 from userData import (currentWeek, year, leagues)
 from roundUpReport import (roundUp)
