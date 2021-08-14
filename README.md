@@ -2,7 +2,6 @@
 This is a tool for accessing the ESPN Fantasy Football API which provides two main functions:
 
 1. A real-time display of all your matchups across all your leagues.
-![scoreboard image](https://i.imgur.com/1JeyGhS.png)
 
 2. A report on the results of a given week's matchups in the league of your choice. This is primarily for commissioners who would like to add something to their league experience.
 
